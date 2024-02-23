@@ -1,8 +1,10 @@
 package com.onurhaktan.emsbackend.service.impl;
 
 import com.onurhaktan.emsbackend.dto.EmployeeDto;
+import com.onurhaktan.emsbackend.entity.Department;
 import com.onurhaktan.emsbackend.entity.Employee;
 import com.onurhaktan.emsbackend.exception.ResourceNotFoundException;
+import com.onurhaktan.emsbackend.repository.DepartmentRepository;
 import com.onurhaktan.emsbackend.repository.EmployeeRepository;
 import com.onurhaktan.emsbackend.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +19,17 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
         Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
+
+        Department department = departmentRepository.findById(employeeDto.getDepartmentId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Department is not exists with id: " + employeeDto.getDepartmentId()));
+        employee.setDepartment(department);
+
         Employee savedEmployee = employeeRepository.save(employee);
         return EmployeeMapper.mapToEmployeeDto(savedEmployee);
     }
@@ -54,6 +63,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setFirstName(updatedEmployee.getFirstName());
         employee.setLastName(updatedEmployee.getLastName());
         employee.setEmail(updatedEmployee.getEmail());
+
+        Department department = departmentRepository.findById(updatedEmployee.getDepartmentId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Department is not exists with id: " + updatedEmployee.getDepartmentId()));
+        employee.setDepartment(department);
 
         Employee updatedEmployeeObj = employeeRepository.save(employee);
 
