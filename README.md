@@ -25,7 +25,7 @@ React JS 18+, React Hooks, React Router, Axios, Bootstrap CSS framework, Visual 
   ```
 2- Create the database:
 
-Connect to your MySQL client and create a new database:
+Configure to your database settings from application.properties file and Connect MySQL client and create a new database:
 
   ```sh
   CREATE DATABASE ems;
