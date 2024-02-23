@@ -1,4 +1,4 @@
-package mapper;
+package com.onurhaktan.emsbackend.mapper;
 
 import com.onurhaktan.emsbackend.dto.EmployeeDto;
 import com.onurhaktan.emsbackend.entity.Employee;

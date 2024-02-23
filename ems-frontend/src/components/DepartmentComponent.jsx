@@ -1,35 +1,72 @@
-import React, { useState } from 'react'
-import { createDepartment } from '../services/DepartmentService';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { createDepartment, getDepartmentById, updateDepartment } from '../services/DepartmentService';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const DepartmentComponent = () => {
 
 const [departmentName, setDepartmentName] = useState('')
 const [departmentDescription, setDepartmentDescription] = useState('')
 
+const {id} = useParams();
 const navigator = useNavigate();
 
-function saveDepartment(e){
+useEffect(() => {
+    getDepartmentById(id).then((response) => {
+        setDepartmentName(response.data.departmentName);
+        setDepartmentDescription(response.data.departmentDescription);
+    }).catch(error => {
+        console.error(error);
+    })
+
+}, [id])
+
+function saveOrUpdateDepartment(e){
     e.preventDefault();
 
     const department = { departmentName, departmentDescription }
 
     console.log(department);
 
-    createDepartment(department).then((response) => {
-        console.log(response.data);
-        navigator('/departments')
-    }).catch(error => {
-        console.error(error);
-    })
+    if(id){
+        updateDepartment(id, department).then((response) => {
+            console.log(response.data);
+            navigator('/departments');
+        }).catch(error => {
+            console.error(error);
+        })
+    } else {
+        createDepartment(department).then((response) => {
+            console.log(response.data);
+            navigator('/departments')
+        }).catch(error => {
+            console.error(error);
+        })
+    }
 }
 
+function pageTitle(){
+    if(id){
+        return <h2 className='text-center'>Update Department</h2>
+    } else {
+        return <h2 className='text-center'>Add Department</h2>
+    }
+}
+
+function pageButton(){
+    if(id){
+        return <button className='btn btn-success mb-2' onClick={(e) => saveOrUpdateDepartment(e)}>Edit</button>
+    } else {
+        return <button className='btn btn-success mb-2' onClick={(e) => saveOrUpdateDepartment(e)}>Submit</button>
+    }
+}
 
   return (
     <div className='container'> <br /><br />
         <div className='row'>
             <div className='card col-md-6 offset-md-3 offset-md-3'>
-                <h2 className='text-center'>Add Department</h2>
+                {
+                    pageTitle()    
+                }
                 <div className='card-body'>
                     <form>
                         <div className='form-group mb-2'>
@@ -51,7 +88,9 @@ function saveDepartment(e){
                                 onChange={(e) => setDepartmentDescription(e.target.value)}
                                 className='form-control'/>
                         </div>
-                        <button className='btn btn-success mb-2' onClick={(e) => saveDepartment(e)}>Submit</button>
+                        <div className="text-center">
+                                {pageButton()}
+                        </div>
                     </form>
                 </div>
             </div>

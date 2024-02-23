@@ -6,7 +6,7 @@ import com.onurhaktan.emsbackend.exception.ResourceNotFoundException;
 import com.onurhaktan.emsbackend.repository.EmployeeRepository;
 import com.onurhaktan.emsbackend.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import mapper.EmployeeMapper;
+import com.onurhaktan.emsbackend.mapper.EmployeeMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
