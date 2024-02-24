@@ -33,7 +33,7 @@ Configure to your database settings from application.properties file and Connect
 3- For the backend, navigate to the backend directory and start the Spring Boot application:
   ```sh
    cd ems-backend
-  ./mvnw spring-boot:run
+   mvn spring-boot:run
   ```
 
 4- For the frontend, navigate to the frontend directory, install the necessary dependencies, and start the React application:
